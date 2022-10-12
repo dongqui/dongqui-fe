@@ -21,10 +21,6 @@ const usePagination = ({
 }: UsePaginationParams) => {
   const [selectedPage, setSelectedPage] = useState<number>(currentPage);
 
-  useEffect(() => {
-    onChangePage(selectedPage);
-  }, [selectedPage, onChangePage])
-
   const pageOffset = (Math.ceil(selectedPage / pageCountPerSection) - 1) * pageCountPerSection;
   const lastPage = Math.ceil(totalCount / itemCountPerPage);
 
@@ -32,20 +28,30 @@ const usePagination = ({
   
   const prevPageSectionDisabled = pages[0] === 1;
   const nextPageSectionDisabled = pages[pages.length - 1] === lastPage;
+  
   return {
     pages,
     selectedPage,
-    setSelectedPage,
     goToPrevPageSection() {
       if (!prevPageSectionDisabled) {
-        setSelectedPage(pageOffset - pageCountPerSection + 1);
+        const FirstPageInPrevPageSction = pageOffset - pageCountPerSection + 1;
+        setSelectedPage(FirstPageInPrevPageSction);
+        onChangePage(FirstPageInPrevPageSction);
       }
     },
     goToNextPageSection() {
       if (!nextPageSectionDisabled) {
-        setSelectedPage(pageOffset + pageCountPerSection + 1);
+        const LastPageInNextPageSction = pageOffset + pageCountPerSection + 1;
+        setSelectedPage(LastPageInNextPageSction);
+        onChangePage(LastPageInNextPageSction);
       }
     },
+    handeClickPage(page: number) {
+      return () => {
+        setSelectedPage(page);
+        onChangePage(page);
+      }
+    }, 
     prevPageSectionDisabled,
     nextPageSectionDisabled,
   }

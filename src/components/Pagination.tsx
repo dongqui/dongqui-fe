@@ -15,17 +15,14 @@ const Pagination = ({ totalCount, currentPage, onChangePage}: Props) => {
   const { 
     pages, 
     selectedPage,
-    setSelectedPage,
+    handeClickPage,
     goToNextPageSection, 
     goToPrevPageSection, 
     prevPageSectionDisabled, 
     nextPageSectionDisabled, 
   } = usePagination({ totalCount, currentPage, onChangePage });
 
-  const handeClickPage = (page: number) => () => {
-    setSelectedPage(page);
-  }
-
+  
   return (
     <Container>
       <Button disabled={prevPageSectionDisabled} onClick={goToPrevPageSection}>

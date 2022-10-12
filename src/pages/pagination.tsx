@@ -28,7 +28,7 @@ const PaginationPage: NextPage = () => {
   const { data } = useProductsQuery(page);
   
   const handleChangePage = (page: number) => {
-    router.push(`/pagination?page=${page}`, undefined, { shallow: true })
+    router.push(`/pagination?page=${page}`, undefined, { shallow: true });
   }
 
   if (!data) {
