@@ -1,9 +1,15 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
 import styled from 'styled-components';
+import { useLoginMutation, useForm } from '../hooks';
+import type { LoginPayload } from '../types';
 
 const LoginPage: NextPage = () => {
+  const { register, errors, handleSubmit, isAllValid, setError } = useForm();   
+
+  const handleSubmitCallback = (params: LoginPayload) => {  
+  }
+
   return (
     <>
       <Header>
@@ -14,12 +20,30 @@ const LoginPage: NextPage = () => {
           <p>login</p>
         </Link>
       </Header>
-      <Form>
-        <div>아이디</div>
-        <TextInput type='text' />
-        <div>비밀번호</div>
-        <TextInput type='password' />
-        <LoginButton disabled>로그인</LoginButton>
+      <Form onSubmit={handleSubmit(handleSubmitCallback)}>
+        <label>아이디</label>
+        <TextInput type='text' {...register('id', {
+          validations:[{
+              pattern: (value) => /^[a-zA-Z0-9]{5,30}$/.test(value),
+              errorMessage: '올바른 아이디 형식으로 입력해주세요.'
+            }            
+          ]
+        })}/>
+        {errors.id && <ErrorMessage>{errors.id}</ErrorMessage>}
+        
+        <Spacing />      
+        
+        <label>비밀번호</label>
+        <TextInput type='password' {...register('password', {
+          validations:[{
+            pattern: (value) => /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,30}$/.test(value),
+            errorMessage: '올바른 비밀번호 형식으로 입력해주세요'
+          }            
+        ]
+        })}/>
+        {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
+
+        <LoginButton disabled={!isAllValid}>로그인</LoginButton>        
       </Form>
     </>
   );
@@ -27,7 +51,7 @@ const LoginPage: NextPage = () => {
 
 export default LoginPage;
 
-const Header = styled.div`
+const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,15 +62,32 @@ const Title = styled.a`
   font-size: 48px;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 40px;
   padding: 0 20px 40px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #6C6C7D;
 `;
 
-const TextInput = styled.input`
-  border: 1px solid #000;
+const TextInput = styled.input`  
+  margin-top: 8px;
+  padding: 16px;
+  background: #F7F7FA;
+  border-radius: 12px;
+`;
+
+const ErrorMessage = styled.span`
+  margin-top: 8px;
+  font-weight: 400;
+  color: #ED4E5C;
+`
+
+const Spacing = styled.div`
+  flex: 'none';
+  height: 16px;
 `;
 
 const LoginButton = styled.button`
