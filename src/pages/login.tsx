@@ -5,9 +5,19 @@ import { useLoginMutation, useForm } from '../hooks';
 import type { LoginPayload } from '../types';
 
 const LoginPage: NextPage = () => {
+  const { mutate } = useLoginMutation();
   const { register, errors, handleSubmit, isAllValid, setError } = useForm();   
 
   const handleSubmitCallback = (params: LoginPayload) => {  
+    mutate(params, {      
+      onError(e) {
+        if (e.status === 401.1) {
+          setError('id', '존재 하지 않는 아이디 입니다.')
+        } else if (e.status === 401.2) {
+          setError('password', '비밀번호가 틀렸습니다.')
+        }
+      },
+    })
   }
 
   return (
