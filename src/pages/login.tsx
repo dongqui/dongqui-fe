@@ -1,15 +1,21 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
 import styled from 'styled-components';
-import { useLoginMutation, useForm } from '../hooks';
+import router from 'next/router'
+
+import { useLoginMutation, useForm, useUserQuery } from '../hooks';
 import type { LoginPayload } from '../types';
 
 const LoginPage: NextPage = () => {
+  const user = useUserQuery();
   const { mutate } = useLoginMutation();
   const { register, errors, handleSubmit, isAllValid, setError } = useForm();   
 
   const handleSubmitCallback = (params: LoginPayload) => {  
     mutate(params, {      
+      onSuccess() {
+        router.replace('/');
+      },
       onError(e) {
         if (e.status === 401.1) {
           setError('id', '존재 하지 않는 아이디 입니다.')
@@ -20,6 +26,9 @@ const LoginPage: NextPage = () => {
     })
   }
 
+  if (user.data?.ID) {
+    router.replace('/');
+  }
   return (
     <>
       <Header>
