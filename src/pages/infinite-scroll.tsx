@@ -1,12 +1,20 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
 
-import products from '../api/data/products.json';
 import ProductList from '../components/ProductList';
+import { useProductsInfiniteQuery, useIntersectionObserver } from '../hooks'
 
 const InfiniteScrollPage: NextPage = () => {
+  const bottom = useRef<HTMLDivElement>(null)
+  const { data, hasNextPage, fetchNextPage, isFetching } = useProductsInfiniteQuery();
+  const entry = useIntersectionObserver(bottom, {});
+
+  if (entry?.isIntersecting && hasNextPage) {
+    fetchNextPage();
+  }
+  
   return (
     <>
       <Header>
@@ -18,8 +26,11 @@ const InfiniteScrollPage: NextPage = () => {
         </Link>
       </Header>
       <Container>
-        <ProductList products={products} />
+        {data?.pages.map((group, i) => <ProductList key={i} products={group?.products || []} />) }
       </Container>
+
+      <div ref={bottom}/>
+      {isFetching && <div>Loading...</div>}
     </>
   );
 };
