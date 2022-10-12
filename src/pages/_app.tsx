@@ -1,5 +1,7 @@
 import type { AppProps } from 'next/app';
 import styled from 'styled-components';
+import { QueryClient, QueryClientProvider, Hydrate } from 'react-query'
+import { useRef } from 'react';
 
 import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
@@ -7,13 +9,19 @@ import GlobalStyle from '../styles/GlobalStyle';
 setupMSW();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const queryClient = useRef(new QueryClient());
+  
   return (
     <>
-      <GlobalStyle />
-      <Background />
-      <Content>
-        <Component {...pageProps} />
-      </Content>
+    <QueryClientProvider client={queryClient.current}>
+      <Hydrate state={pageProps.dehydratedState}>
+        <GlobalStyle />
+        <Background />
+        <Content>
+          <Component {...pageProps} />
+        </Content>
+      </Hydrate>      
+    </QueryClientProvider>      
     </>
   );
 }
