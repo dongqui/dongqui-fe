@@ -9,11 +9,14 @@ import GlobalStyle from '../styles/GlobalStyle';
 setupMSW();
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const queryClient = useRef(new QueryClient());
+  const queryClientRef = useRef<QueryClient>()
+  if (!queryClientRef.current) {
+    queryClientRef.current = new QueryClient()
+  }
   
   return (
     <>
-    <QueryClientProvider client={queryClient.current}>
+    <QueryClientProvider client={queryClientRef?.current}>
       <Hydrate state={pageProps.dehydratedState}>
         <GlobalStyle />
         <Background />

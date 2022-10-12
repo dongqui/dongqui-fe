@@ -5,6 +5,11 @@ export type Product = {
   price: number;
 }
 
+export interface ProductsResult {
+  products: Product[],
+  totalCount: number;
+}
+
 export interface LoginPayload {
   id: string;
   password: string;

@@ -1,16 +1,39 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import type { NextPage } from 'next';
-import React from 'react';
+import type { NextPage, GetServerSideProps } from 'next';
 import styled from 'styled-components';
+import { QueryClient, dehydrate } from 'react-query';
 
-import products from '../api/data/products.json';
 import ProductList from '../components/ProductList';
 import Pagination from '../components/Pagination';
+import { useProductsQuery } from '../hooks'
+import { getProducts } from '../remotes';
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const page = (!query.page || Array.isArray(query.page)) ? '1' : query.page;
+
+  const queryClient = new QueryClient()
+  await queryClient.prefetchQuery(['products', page], () => getProducts(page));
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  }  
+}
 
 const PaginationPage: NextPage = () => {
   const router = useRouter();
-  const { page } = router.query;
+  const page = (!router.query.page || Array.isArray(router.query.page)) ? '1' : router.query.page;
+  const { data } = useProductsQuery(page);
+  
+  const handleChangePage = (page: number) => {
+    router.push(`/pagination?page=${page}`, undefined, { shallow: true })
+  }
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <>
@@ -23,8 +46,8 @@ const PaginationPage: NextPage = () => {
         </Link>
       </Header>
       <Container>
-        <ProductList products={products.slice(0, 10)} />
-        <Pagination />
+        <ProductList products={data?.products || []} />
+        <Pagination totalCount={data?.totalCount} currentPage={+page} onChangePage={handleChangePage}/>
       </Container>
     </>
   );
