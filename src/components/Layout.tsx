@@ -63,7 +63,7 @@ const LogoutButton = styled.button`
   cursor: pointer;
 `;
 
-const Content = styled.div`
+const Content = styled.main`
   width: 420px;
   min-height: 100%;
   margin: 0 auto;

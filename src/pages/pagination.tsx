@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import type { NextPage, GetServerSideProps } from 'next';
 import styled from 'styled-components';
 import { QueryClient, dehydrate } from 'react-query';
@@ -46,18 +45,7 @@ const PaginationPage: NextPage = () => {
 
 export default PaginationPage;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
-
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
