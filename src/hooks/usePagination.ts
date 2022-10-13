@@ -34,7 +34,7 @@ const usePagination = ({
     selectedPage,
     goToPrevPageSection() {
       if (!prevPageSectionDisabled) {
-        const FirstPageInPrevPageSction = pageOffset - pageCountPerSection + 1;
+        const FirstPageInPrevPageSction = pageOffset
         setSelectedPage(FirstPageInPrevPageSction);
         onChangePage(FirstPageInPrevPageSction);
       }
