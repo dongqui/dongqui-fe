@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 import { Product } from '../types';
+import LazyImage from '../components/LazyImage';
 
 type ProductItemProps = {
   product: Product;
@@ -11,7 +12,7 @@ const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemPro
   <Container>
     <Link href={`/products/${id}`}>
       <a>
-        <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
+        <LazyImage src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} width='100%' height='180px'/>
         <Name>{name}</Name>
         <Price>{price.toLocaleString('ko-KR')}원</Price>
       </a>      
@@ -26,11 +27,6 @@ const Container = styled.li`
   margin-left: 20px;
   margin-top: 20px;
   cursor: pointer;
-`;
-
-const Thumbnail = styled.img`
-  width: 100%;
-  height: 180px;
 `;
 
 const Name = styled.h4`
