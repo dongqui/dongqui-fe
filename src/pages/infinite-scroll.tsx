@@ -22,12 +22,17 @@ import { INFINITE_PRODUCT_COUNT_PER_PAGE } from '../contstants';
 
 const InfiniteScrollPage: NextPage = () => {
   const bottom = useRef<HTMLDivElement>(null)
-  const { data, hasNextPage, fetchNextPage, isFetching } = useProductsInfiniteQuery();
-  const entry = useIntersectionObserver(bottom, {});
+  const { data, hasNextPage, fetchNextPage, isFetching, status } = useProductsInfiniteQuery();
+  
+  const handleIntersection = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  } 
 
-  if (entry?.isIntersecting && hasNextPage) {
-    fetchNextPage();
-  }
+  useIntersectionObserver(bottom, {
+    onIntersection: handleIntersection,
+  });  
   
   return (
     <> 

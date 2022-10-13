@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { useIntersectionObserver } from '../hooks';
 
@@ -10,12 +10,15 @@ interface Props {
 }
 
 const LazyImage = ({ src, width, height}: Props) => {
+  const [showImg, setShowImg] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
-  const entry = useIntersectionObserver(imgRef, {});
   
-  const isShow = entry?.isIntersecting;
+  useIntersectionObserver(imgRef, {
+    onIntersection: () => setShowImg(true),
+    frozenAfterOnce: true,
+  });
 
-  return <Img ref={imgRef} width={width} height={height} src={isShow? src : '/defaultThumbnail.jpg'}/>
+  return <Img ref={imgRef} width={width} height={height} src={showImg? src : '/defaultThumbnail.jpg'}/>
 }
 
 export default LazyImage;
