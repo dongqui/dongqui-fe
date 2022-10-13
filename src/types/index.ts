@@ -5,6 +5,9 @@ export type Product = {
   price: number;
 }
 
+export interface ProductResult {
+  product: Product;
+}
 export interface ProductsResult {
   products: Product[],
   totalCount: number;
