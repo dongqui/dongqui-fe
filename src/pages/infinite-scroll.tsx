@@ -1,43 +1,54 @@
 import Link from 'next/link';
-import type { NextPage } from 'next';
-import React from 'react';
+import type { NextPage, GetServerSideProps } from 'next';
+import { useRef } from 'react';
 import styled from 'styled-components';
+import { QueryClient, dehydrate } from 'react-query';
 
-import products from '../api/data/products.json';
 import ProductList from '../components/ProductList';
+import { useProductsInfiniteQuery, useIntersectionObserver } from '../hooks'
+import { getProducts } from '../remotes';
+import { INFINITE_PRODUCT_COUNT_PER_PAGE } from '../contstants';
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const queryClient = new QueryClient()
+//   await queryClient.prefetchQuery(['products_infinite'], () =>  getProducts(1, INFINITE_PRODUCT_COUNT_PER_PAGE));
+
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   }  
+// }
 
 const InfiniteScrollPage: NextPage = () => {
+  const bottom = useRef<HTMLDivElement>(null)
+  const { data, hasNextPage, fetchNextPage, isFetching } = useProductsInfiniteQuery();
+  
+  const handleIntersection = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  } 
+
+  useIntersectionObserver(bottom, {
+    onIntersection: handleIntersection,
+  });  
+  
   return (
-    <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
+    <> 
       <Container>
-        <ProductList products={products} />
+        {data?.pages.map((group, i) => <ProductList key={i} products={group?.products || []} />) }
       </Container>
+
+      <div ref={bottom}/>
+      {isFetching && <div>Loading...</div>}
     </>
   );
 };
 
 export default InfiniteScrollPage;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
-
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
