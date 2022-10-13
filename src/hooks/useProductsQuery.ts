@@ -4,7 +4,10 @@ import type { ProductsResult } from '../types';
 import { getProducts } from '../remotes';
 
 const useProductsQuery = (page: string | number = 0) => {
-  return useQuery<ProductsResult, AxiosError>(['products', page], () => getProducts(page), { keepPreviousData : true });
+  return useQuery<ProductsResult, AxiosError>(['products', page], () => getProducts(page), { 
+    keepPreviousData : true,
+    retry: false,
+  });
 }
 
 export default useProductsQuery;

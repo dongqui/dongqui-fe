@@ -22,7 +22,7 @@ import { INFINITE_PRODUCT_COUNT_PER_PAGE } from '../contstants';
 
 const InfiniteScrollPage: NextPage = () => {
   const bottom = useRef<HTMLDivElement>(null)
-  const { data, hasNextPage, fetchNextPage, isFetching, status } = useProductsInfiniteQuery();
+  const { data, hasNextPage, fetchNextPage, isFetching } = useProductsInfiniteQuery();
   
   const handleIntersection = () => {
     if (hasNextPage) {
