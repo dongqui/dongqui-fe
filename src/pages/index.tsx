@@ -3,36 +3,11 @@ import type { NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 
-import { useUserQuery, useLogoutMutation } from '../hooks';
 
-const HomePage: NextPage = () => {
-  const user = useUserQuery();
-  const logout = useLogoutMutation();
-
-  const handleClickLogout = () => {
-    logout.mutate();
-  }
+const HomePage: NextPage = () => {  
 
   return (
-    <>
-      <Header>
-        <Nav>
-          <Link href='/'>
-            <Title>HAUS</Title>
-          </Link>
-          {
-          user?.data?.ID ? 
-            (<Profile>
-              {user?.data?.ID}
-              <LogoutButton onClick={handleClickLogout}>logout</LogoutButton>
-            </Profile>) :
-          
-            (<Link href='/login'>
-              <p>login</p>
-            </Link>)
-          }        
-        </Nav>        
-      </Header>
+    <>      
       <Container>
         <Link href='/pagination?page=1'>
           <StyledLink>pagination</StyledLink>
@@ -47,17 +22,6 @@ const HomePage: NextPage = () => {
 
 export default HomePage;
 
-const Header = styled.header`  
-  padding: 20px;
-`;
-const Nav = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;  
-`;
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Container = styled.nav`
   display: flex;
@@ -81,15 +45,4 @@ const StyledLink = styled.a`
   & + & {
     margin-top: 40px;
   }
-`;
-
-const Profile = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-`
-
-const LogoutButton = styled.button`
-  width: 45px;
-  cursor: pointer;
 `;

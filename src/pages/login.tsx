@@ -30,41 +30,31 @@ const LoginPage: NextPage = () => {
     router.replace('/');
   }
   return (
-    <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
-      <Form onSubmit={handleSubmit(handleSubmitCallback)}>
-        <label>아이디</label>
-        <TextInput type='text' {...register('id', {
-          validations:[{
-              pattern: (value) => /^[a-zA-Z0-9]{5,30}$/.test(value),
-              errorMessage: '올바른 아이디 형식으로 입력해주세요.'
-            }            
-          ]
-        })}/>
-        {errors.id && <ErrorMessage>{errors.id}</ErrorMessage>}
-        
-        <Spacing />      
-        
-        <label>비밀번호</label>
-        <TextInput type='password' {...register('password', {
-          validations:[{
-            pattern: (value) => /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,30}$/.test(value),
-            errorMessage: '올바른 비밀번호 형식으로 입력해주세요'
+    <Form onSubmit={handleSubmit(handleSubmitCallback)}>
+      <label>아이디</label>
+      <TextInput type='text' {...register('id', {
+        validations:[{
+            pattern: (value) => /^[a-zA-Z0-9]{5,30}$/.test(value),
+            errorMessage: '올바른 아이디 형식으로 입력해주세요.'
           }            
         ]
-        })}/>
-        {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
+      })}/>
+      {errors.id && <ErrorMessage>{errors.id}</ErrorMessage>}
+      
+      <Spacing />      
+      
+      <label>비밀번호</label>
+      <TextInput type='password' {...register('password', {
+        validations:[{
+          pattern: (value) => /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,30}$/.test(value),
+          errorMessage: '올바른 비밀번호 형식으로 입력해주세요'
+        }            
+      ]
+      })}/>
+      {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
 
-        <LoginButton disabled={!isAllValid}>로그인</LoginButton>        
-      </Form>
-    </>
+      <LoginButton disabled={!isAllValid}>로그인</LoginButton>        
+    </Form>
   );
 };
 

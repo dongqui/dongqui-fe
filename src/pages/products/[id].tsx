@@ -1,27 +1,38 @@
 import Link from 'next/link';
-import type { NextPage } from 'next';
-import React from 'react';
+import type { NextPage, GetServerSideProps } from 'next';
+import { useRouter } from 'next/router'
 import styled from 'styled-components';
+import { QueryClient, dehydrate } from 'react-query';
+import { ErrorBoundary } from 'react-error-boundary'
 
-import products from '../../api/data/products.json';
+import { getProduct } from '../../remotes';
+import { useProductQuery } from '../../hooks';
+
+// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+//   const id = query.id;
+// 	const queryClient = new QueryClient()
+	
+//   // await queryClient.fetchQuery(['product'], () => getProduct(id as string));
+
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// }
+
 
 const ProductDetailPage: NextPage = () => {
-  const product = products[0];
-
+  const router = useRouter();
+  const id = Array.isArray(router?.query?.id) ? router?.query?.id.join('') : router?.query?.id || '';
+  const { data } = useProductQuery(id);
+  
   return (
-    <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
-      <Thumbnail src={product.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
+    <>      
+      <Thumbnail src={data?.product?.thumbnail ? data?.product?.thumbnail : '/defaultThumbnail.jpg'} />
       <ProductInfoWrapper>
-        <Name>{product.name}</Name>
-        <Price>{product.price}원</Price>
+        <Name>{data?.product?.name}</Name>
+        <Price>{data?.product?.price?.toLocaleString('ko-KR')}원</Price>
       </ProductInfoWrapper>
     </>
   );

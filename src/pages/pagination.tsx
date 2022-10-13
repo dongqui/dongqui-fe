@@ -9,18 +9,18 @@ import Pagination from '../components/Pagination';
 import { useProductsQuery } from '../hooks'
 import { getProducts } from '../remotes';
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const page = (!query.page || Array.isArray(query.page)) ? '1' : query.page;
+// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+//   const page = (!query.page || Array.isArray(query.page)) ? '1' : query.page;
 
-  const queryClient = new QueryClient()
-  await queryClient.prefetchQuery(['products', page], () => getProducts(page));
+//   const queryClient = new QueryClient()
+//   await queryClient.prefetchQuery(['products', page], () => getProducts(page));
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  }  
-}
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   }  
+// }
 
 const PaginationPage: NextPage = () => {
   const router = useRouter();
@@ -36,22 +36,13 @@ const PaginationPage: NextPage = () => {
   }
 
   return (
-    <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
-      <Container>
-        <ProductList products={data?.products || []} />
-        <Pagination totalCount={data?.totalCount} currentPage={+page} onChangePage={handleChangePage}/>
-      </Container>
-    </>
+    <Container>
+      <ProductList products={data?.products || []} />
+      <Pagination totalCount={data?.totalCount} currentPage={+page} onChangePage={handleChangePage}/>
+    </Container>
   );
 };
+
 
 export default PaginationPage;
 
