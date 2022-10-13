@@ -7,3 +7,4 @@ export { default as useLogoutMutation} from './useLogoutMutation';
 export { default as useProductsInfiniteQuery} from './useProductsInfiniteQuery';
 export { default as useIntersectionObserver} from './useIntersectionObserver';
 export { default as useProductQuery } from './useProductQuery';
+export { default as usePreserveScroll } from './usePreserveScroll';

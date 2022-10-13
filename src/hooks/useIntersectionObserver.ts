@@ -6,7 +6,7 @@ function useIntersectionObserver(
   {
     threshold = 0,
     root = null,
-    rootMargin = '10% 10% 10% 10%',
+    rootMargin = '0%',
   }: Partial<IntersectionObserverInit>,
 ): IntersectionObserverEntry | undefined {
   const [entry, setEntry] = useState<IntersectionObserverEntry>()

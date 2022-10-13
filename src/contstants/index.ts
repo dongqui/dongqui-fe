@@ -1,0 +1,1 @@
+export const INFINITE_PRODUCT_COUNT_PER_PAGE = 16;
